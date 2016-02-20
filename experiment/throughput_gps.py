@@ -23,7 +23,8 @@ def getGpsData(gpsData):
     speed = dic['speed']
     time = dic['time']
     return lat, lon, speed, time
-
+    
+# @yijing: maybe need to change a bit for parsing tcp throughput.
 def parse_throughput_loss_per_line(line):
     """ Return the throughput of each line of the iperf reading in 
     Mbps."""
@@ -71,6 +72,7 @@ thread.start()
 time.sleep(2)
 
 outf = open(outputFile, 'w') if outputFile else sys.stdout
+#@yijing: change the command format here. 
 cmd = "python server_udp.py"
 baseratePipe = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
 mode = fcntl.fcntl(baseratePipe.stdout.fileno(), fcntl.F_GETFL) | os.O_NONBLOCK
