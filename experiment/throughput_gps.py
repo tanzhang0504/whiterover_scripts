@@ -13,7 +13,8 @@ import re
 import gps_parser
 
 NUMBER_OF_DATARATES = 12
-IPERF_PATTERN = "(\d+(.\d+)?)\s+(\w?)bits/sec.*\((\d+)\%"
+THROUGHPUT_PATTERN = "(\d+(.\d+)?)\s+(\w?)bits/sec"
+LOSS_PATTERN = "\((\d+)\%"
 
 def getGpsData(gpsData):
     dic = gpsData.get_info()
@@ -23,27 +24,26 @@ def getGpsData(gpsData):
     speed = dic['speed']
     time = dic['time']
     return lat, lon, speed, time
-    
-# @yijing: maybe need to change a bit for parsing tcp throughput.
+
 def parse_throughput_loss_per_line(line):
     """ Return the throughput of each line of the iperf reading in 
     Mbps."""
 
     throughput = -1.0
     lossRate = -1.0
-    m = re.search(IPERF_PATTERN, line)
-    if m: 
-        throughput = float(m.group(1))
-        if m.group(3) == 'K':
+    m1 = re.search(THROUGHPUT_PATTERN, line)
+    if m1: 
+        throughput = float(m1.group(1))
+        if m1.group(3) == 'K':
             throughput = throughput/1000.
-        elif m.group(3) == 'M':
+        elif m1.group(3) == 'M':
             throughput = throughput
         else:  # in bytes
             throughput = throughput/1.e6
 
-        #m2 = re.search(LOSS_PATTERN, line)
-        #if m2:
-        lossRate = float(m.group(4))
+    m2 = re.search(LOSS_PATTERN, line)
+    if m2:
+        lossRate = float(m2.group(1))
         lossRate = lossRate/100.
 
 
@@ -54,12 +54,15 @@ def parse_throughput_loss_per_line(line):
 
 outputFile = None
 device = None
+python_script = None
 
-if len(sys.argv) == 3:
-    outputFile = sys.argv[2]
-    device = sys.argv[1]
-elif len(sys.argv) == 2:
-    device = sys.argv[1]
+if len(sys.argv) == 4:
+    outputFile = sys.argv[3]
+    device = sys.argv[2]
+    python_script = sys.arg[1]
+elif len(sys.argv) == 3:
+    device = sys.argv[2]
+    python_script = sys.arg[1]
 else:
     print "This script takes a device and an optional file as arguments"
     sys.exit(1)
@@ -72,8 +75,8 @@ thread.start()
 time.sleep(2)
 
 outf = open(outputFile, 'w') if outputFile else sys.stdout
-#@yijing: change the command format here. 
-cmd = "python server_udp.py"
+
+cmd = "python " + python_script
 baseratePipe = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
 mode = fcntl.fcntl(baseratePipe.stdout.fileno(), fcntl.F_GETFL) | os.O_NONBLOCK
 fcntl.fcntl(baseratePipe.stdout.fileno(), fcntl.F_SETFL, mode) # file lock
