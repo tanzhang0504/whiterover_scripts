@@ -18,7 +18,6 @@ LOSS_PATTERN = "\((\d+)\%"
 
 def getGpsData(gpsData):
     dic = gpsData.get_info()
-
     lat = dic['lat']
     lon = dic['lon']
     speed = dic['speed']
@@ -61,7 +60,7 @@ if __name__ == '__main__':
     
     gps_info = gps_parser.GPSInfo()
     gps_parse = gps_parser.GPSParser()
-    thread = threading.Thread(target=gps_parser.GPSParser.read_gps, args=(gps_parse, gps_info, device, true))
+    thread = threading.Thread(target=gps_parser.GPSParser.read_gps, args=(gps_parse, gps_info, device, True))
     thread.start()
     time.sleep(2)
     outf = open(outputFile, 'w') if outputFile else sys.stdout
@@ -80,7 +79,7 @@ if __name__ == '__main__':
                     continue
             throughput, loss = parse_throughput_loss_per_line(line)
             lat, lon, speed, time = getGpsData(gps_info)
-            print >> outf, "%g %.6f %.6f %.3f %.3f %g" % (time, lat, lon, speed, throughput, loss)
+            print >>outf, "%g %.6f %.6f %.3f %.3f %g" % (time, lat, lon, speed, throughput, loss)
             outf.flush()
             
     if outputFile != None:
