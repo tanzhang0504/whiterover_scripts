@@ -75,13 +75,13 @@ if __name__ == '__main__':
             while True:
                 try:
                     line = baseratePipe.stdout.readline()
+                    break;
                 except IOError:
                     continue
-                break
             throughput, loss = parse_throughput_loss_per_line(line)
             lat, lon, speed, time = getGpsData(gps_info)
             print >> outf, "%g %.6f %.6f %.3f %.3f %g" % (time, lat, lon, speed, throughput, loss)
             outf.flush()
             
     if outputFile != None:
-        close(outf)
+        outf.close()
