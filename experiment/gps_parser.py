@@ -80,7 +80,7 @@ class GPSParser(object):
 	def set_is_done(self, done):
 		self._is_done = done
 	
-	def read_gps(self, gps_info, dev, read_laptop_time=False):
+	def read_gps(self, gps_info, dev, read_laptop_time=True):
 		cmd = "gpspipe " + dev + " -w"
 		gpspipe = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE) # create a new subprocess
 		mode = fcntl.fcntl(gpspipe.stdout.fileno(), fcntl.F_GETFL) | os.O_NONBLOCK
@@ -136,7 +136,7 @@ class GPSParser(object):
 
 if __name__ == '__main__':
 	gps_info = GPSInfo()
-	gps_parser = GPSParser(5)
-	gps_parser.read_gps(gps_info)
+	gps_parser = GPSParser()
+	gps_parser.read_gps(gps_info, "/dev/ttyUSB0")
 # every module has a property: __name__ 
 # if directly run this .py file, __name__ == '__main__', if import this .py file, __name__ != '__main__'

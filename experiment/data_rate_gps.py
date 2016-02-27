@@ -14,29 +14,27 @@ import gps_parser
 NUMBER_OF_DATARATES = 12
 
 def getGpsData(gpsData):
-    dic = gpsData.get_info()
-    lat = dic['lat']
-    lon = dic['lon']
-    speed = dic['speed']
-    time = dic['time']
-    return lat, lon, speed, time
+	dic = gpsData.get_info()
+	lat = dic['lat']
+	lon = dic['lon']
+	speed = dic['speed']
+	time = dic['time']
+	return lat, lon, speed, time
 
 if __name__ == '__main__':
 	outputFile = None
-	device = None
+	device = ""
+	if len(sys.argv) > 3: 
+		print "Usage: %s [gps_device, output_file]" % sys.argv[0]
+		sys.exit(1)
+	if len(sys.argv) >= 2:
+		device = sys.argv[1]
 	if len(sys.argv) == 3:
 		outputFile = sys.argv[2]
-		device = sys.argv[1]
-	elif len(sys.argv) == 2:
-		device = sys.argv[1]
-	else:
-		print "This script takes a device and an optional file as arguments"
-		sys.exit(1)
-
 
 	gps_info = gps_parser.GPSInfo()
 	gps_parse = gps_parser.GPSParser()
-	thread = threading.Thread(target=gps_parser.GPSParser.read_gps, args=(gps_parse, gps_info, device, True))
+	thread = threading.Thread(target=gps_parser.GPSParser.read_gps, args=(gps_parse, gps_info, device,))
 	thread.start()
 
 	time.sleep(2)
@@ -56,7 +54,7 @@ if __name__ == '__main__':
 			while True:
 				try:
 					line = baseratePipe.stdout.readline()
-                    break
+					break
 				except IOError:
 					continue
 			lineSplit = line.split()
