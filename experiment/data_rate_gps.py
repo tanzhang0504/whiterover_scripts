@@ -24,13 +24,11 @@ def getGpsData(gpsData):
 if __name__ == '__main__':
 	outputFile = None
 	device = ""
-	if len(sys.argv) > 3: 
-		print "Usage: %s [gps_device, output_file]" % sys.argv[0]
+	if len(sys.argv) > 2: 
+		print "Usage: %s [output_file]" % sys.argv[0]
 		sys.exit(1)
-	if len(sys.argv) >= 2:
-		device = sys.argv[1]
-	if len(sys.argv) == 3:
-		outputFile = sys.argv[2]
+	if len(sys.argv) == 2:
+		outputFile = sys.argv[1]
 
 	gps_info = gps_parser.GPSInfo()
 	gps_parse = gps_parser.GPSParser()

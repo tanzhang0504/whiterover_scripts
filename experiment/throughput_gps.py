@@ -63,7 +63,7 @@ if __name__ == '__main__':
 		mode = sys.argv[1]
 		alg = sys.argv[2]
 		drive = sys.argv[3]
-		outputFile = "%s/gps_throughput_%d_%d_%d.dat" % (dirname, mode, alg, drive)
+		outputFile = "%s/gps_throughput_%s_%s_%s.dat" % (dirname, mode, alg, drive)
 	if len(sys.argv) == 5:
 		python_script = sys.argv[4]
 	
