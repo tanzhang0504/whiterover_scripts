@@ -24,6 +24,7 @@ if __name__ == '__main__':
 		totLines = 0
 		missingLines = 0
 		uploader = upload_illegal.DBUploader("localhost", "root", "admin123", "whitespace", tableName)
+		uploader.create_tbl()
 
 		for line in f.readlines():
 			linesplit = line.split()

@@ -35,7 +35,10 @@ class DBUploader(object):
 	def clear_tbl(self):
 		query = "DELETE FROM %s" % (self._tbl_name)
 		self.execute(query)
-		
+	
+	def create_tbl(self):
+		query = "CREATE TABLE %s(Lat FLOAT, \ Long FLOAT, \ Rate10 FLOAT, \ Rate20 FLOAT,\ Rate55 FLOAT,\ Rate60 FLOAT,\ Rate90 FLOAT,\ Rate110 FLOAT,\ Rate120 FLOAT,\ Rate180 FLOAT,\ Rate240 FLOAT,\ Rate360 FLOAT,\ Rate480 FLOAT,\ Rate540 FLOAT)" % (self._tbl_name)
+
 	def uploadDatarates(self, lat, lon, speed, sdr):
 		query = "INSERT INTO %s (lat, lon, speed, rate10, rate20, rate55, \
 				 rate60, rate90, rate110, rate120, rate180, rate240, rate360, \
